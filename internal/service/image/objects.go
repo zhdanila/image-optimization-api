@@ -1,6 +1,10 @@
 package image
 
-type UploadImageRequest struct{}
+import "mime/multipart"
+
+type UploadImageRequest struct {
+	Image *multipart.FileHeader `form:"image" validate:"required"`
+}
 
 type UploadImageResponse struct{}
 

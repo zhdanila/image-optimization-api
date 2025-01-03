@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/samber/do/v2"
 	"image-optimization-api/internal/app"
+	http2 "image-optimization-api/internal/app/interface/http"
 	"image-optimization-api/internal/app/interface/http/website/handler"
 	"image-optimization-api/internal/service/image"
 	"image-optimization-api/pkg/server"
@@ -19,7 +20,9 @@ func NewServer(cnf *app.Config, inj do.Injector) *server.Server {
 		})
 	})
 
-	nameGroup := server.Group("/")
+	server.Validator = http2.CustomValidator()
+
+	nameGroup := server.Group("/api")
 
 	handler.NewAuth(
 		do.MustInvoke[*image.Service](inj),
