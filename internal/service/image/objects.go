@@ -1,13 +1,11 @@
 package image
 
-type UploadImageRequest struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Password  string `json:"password"`
+type UploadImageRequest struct{}
+
+type UploadImageResponse struct{}
+
+type GetImageRequest struct {
+	ListingId string `query:"image_id" validate:"required"`
 }
 
-type UploadImageResponse struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Password  string `json:"password"`
-}
+type GetImageResponse struct{}

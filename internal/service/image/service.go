@@ -28,3 +28,15 @@ func (s *Service) UploadImage(ctx context.Context, obj *UploadImageRequest) (*Up
 
 	return op.respond(), nil
 }
+
+func (s *Service) GetImage(ctx context.Context, obj *GetImageRequest) (*GetImageResponse, error) {
+	var err error
+
+	op := newOperationGetImage(s, obj)
+
+	if err = op.getImage(ctx); err != nil {
+		return nil, err
+	}
+
+	return op.respond(), nil
+}

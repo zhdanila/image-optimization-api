@@ -17,8 +17,11 @@ func NewAuth(imageService *image.Service) *Image {
 	}
 }
 
-func (s *Image) Register(group *echo.Group) {
-	group.POST("/image", s.UploadImage)
+func (s *Image) Register(server *echo.Group) {
+	group := server.Group("/image")
+
+	group.POST("/", s.UploadImage)
+	group.GET("/:image_id", s.GetImage)
 }
 
 func (s *Image) UploadImage(c echo.Context) error {
@@ -32,6 +35,24 @@ func (s *Image) UploadImage(c echo.Context) error {
 	}
 
 	res, err := s.imageService.UploadImage(c.Request().Context(), &obj)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, res)
+}
+
+func (s *Image) GetImage(c echo.Context) error {
+	var (
+		err error
+		obj image.GetImageRequest
+	)
+
+	if err = bind.BindValidate(c, &obj); err != nil {
+		return err
+	}
+
+	res, err := s.imageService.GetImage(c.Request().Context(), &obj)
 	if err != nil {
 		return err
 	}

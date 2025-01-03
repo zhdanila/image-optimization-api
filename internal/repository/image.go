@@ -21,3 +21,9 @@ func (r *Image) UploadImage(ctx context.Context) error {
 
 	return err
 }
+
+func (r *Image) GetImage(ctx context.Context) error {
+	var err error
+
+	return err
+}
