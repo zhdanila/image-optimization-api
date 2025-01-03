@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap"
 	"image-optimization-api/internal/app"
 	"image-optimization-api/internal/app/provider"
+	"image-optimization-api/internal/service/compression"
 	"image-optimization-api/pkg/server"
 	"net/http"
 	"os/signal"
@@ -41,6 +42,7 @@ func (b *Bootstrap) Website() {
 	do.Provide(b.inj, provider.ProvideImageRepository)
 
 	do.Provide(b.inj, provider.ProvideImageService)
+	do.Provide(b.inj, provider.ProvideCompressionService)
 
 	do.Provide(b.inj, provider.ProvideWebsiteServer)
 
@@ -50,6 +52,18 @@ func (b *Bootstrap) Website() {
 	zap.L().Info("Starting application")
 
 	waitForTheEnd := &sync.WaitGroup{}
+
+	go func() {
+		waitForTheEnd.Add(1)
+		defer waitForTheEnd.Done()
+
+		compressionService := do.MustInvoke[*compression.Service](b.inj)
+		zap.L().Info("Starting listening RabbitMQ")
+
+		if err := compressionService.ListenUpdates(ctx); err != nil {
+			zap.L().Error("RabbitMQ has been stopped, ", zap.Error(err))
+		}
+	}()
 
 	go func() {
 		waitForTheEnd.Add(1)
