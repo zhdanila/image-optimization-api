@@ -26,4 +26,8 @@ func (b *Bootstrap) Website() {
 	structs.DefaultTagName = `db`
 
 	do.ProvideValue(b.inj, do.MustInvoke[*app.Config](b.inj).Env)
+
+	do.Provide(b.inj, provider.ProvideImageRepository)
+
+	do.Provide(b.inj, provider.ProvideImageService)
 }
