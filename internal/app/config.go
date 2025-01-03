@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	Env      string `mapstructure:"ENV" validate:"required"`
-	HTTPPort string `mapstructure:"HTTP_PORT" validate:"required"`
+	Env          string `mapstructure:"ENV" validate:"required"`
+	HTTPPort     string `mapstructure:"HTTP_PORT" validate:"required"`
+	RabbitMQHost string `mapstructure:"RABBIT_MQ_HOST" validate:"required"`
 }
 
 func (cnf *Config) GetPort() string {

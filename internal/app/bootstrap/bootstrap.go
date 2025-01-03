@@ -36,6 +36,7 @@ func (b *Bootstrap) Website() {
 	do.ProvideValue(b.inj, do.MustInvoke[*app.Config](b.inj).Env)
 
 	do.Provide(b.inj, provider.ProvideProtoValidator)
+	do.Provide(b.inj, provider.ProvideRabbitMQConnection)
 
 	do.Provide(b.inj, provider.ProvideImageRepository)
 
