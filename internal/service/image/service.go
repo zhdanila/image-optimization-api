@@ -40,3 +40,15 @@ func (s *Service) GetImage(ctx context.Context, obj *GetImageRequest) (*GetImage
 
 	return op.respond(), nil
 }
+
+func (s *Service) ListImages(ctx context.Context, obj *ListImageRequest) (*ListImageResponse, error) {
+	var err error
+
+	op := newOperationListImages(s, obj)
+
+	if err = op.listImages(ctx); err != nil {
+		return nil, err
+	}
+
+	return op.respond(), nil
+}

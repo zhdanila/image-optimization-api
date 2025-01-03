@@ -9,3 +9,7 @@ type GetImageRequest struct {
 }
 
 type GetImageResponse struct{}
+
+type ListImageRequest struct{}
+
+type ListImageResponse struct{}

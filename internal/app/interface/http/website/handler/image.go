@@ -22,6 +22,7 @@ func (s *Image) Register(server *echo.Group) {
 
 	group.POST("/", s.UploadImage)
 	group.GET("/:image_id", s.GetImage)
+	group.GET("/list", s.ListImages)
 }
 
 func (s *Image) UploadImage(c echo.Context) error {
@@ -53,6 +54,24 @@ func (s *Image) GetImage(c echo.Context) error {
 	}
 
 	res, err := s.imageService.GetImage(c.Request().Context(), &obj)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, res)
+}
+
+func (s *Image) ListImages(c echo.Context) error {
+	var (
+		err error
+		obj image.ListImageRequest
+	)
+
+	if err = bind.BindValidate(c, &obj); err != nil {
+		return err
+	}
+
+	res, err := s.imageService.ListImages(c.Request().Context(), &obj)
 	if err != nil {
 		return err
 	}
