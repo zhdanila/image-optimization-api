@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"image-optimization-api/internal/domain/image"
 	"image-optimization-api/pkg/schema"
 )
@@ -13,4 +14,10 @@ func NewImage() *Image {
 	return &Image{
 		Repository: schema.NewRepository(nil, image.Image{}),
 	}
+}
+
+func (r *Image) UploadImage(ctx context.Context) error {
+	var err error
+
+	return err
 }

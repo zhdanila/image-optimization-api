@@ -14,7 +14,7 @@ func NewServer(cnf *app.Config, inj do.Injector) *server.Server {
 	server := server.NewServer(cnf, inj)
 	server.GET("/", func(c echo.Context) error {
 		return c.JSON(200, map[string]string{
-			"service": "user",
+			"service": "image-optimization-api",
 			"message": "Root page do nothing. Please go somewhere else",
 		})
 	})
