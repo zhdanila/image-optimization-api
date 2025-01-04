@@ -38,6 +38,7 @@ func (b *Bootstrap) Website() {
 
 	do.Provide(b.inj, provider.ProvideProtoValidator)
 	do.Provide(b.inj, provider.ProvideRabbitMQConnection)
+	do.Provide(b.inj, provider.ProvideFilestorage)
 
 	do.Provide(b.inj, provider.ProvideImageRepository)
 

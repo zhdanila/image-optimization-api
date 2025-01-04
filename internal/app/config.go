@@ -8,9 +8,15 @@ import (
 )
 
 type Config struct {
-	Env          string `mapstructure:"ENV" validate:"required"`
-	HTTPPort     string `mapstructure:"HTTP_PORT" validate:"required"`
+	Env      string `mapstructure:"ENV" validate:"required"`
+	HTTPPort string `mapstructure:"HTTP_PORT" validate:"required"`
+
 	RabbitMQHost string `mapstructure:"RABBIT_MQ_HOST" validate:"required"`
+
+	S3Region    string `mapstructure:"S3_REGION" validate:"required"`
+	S3AccessKey string `mapstructure:"S3_ACCESS_KEY" validate:"required"`
+	S3SecretKey string `mapstructure:"S3_SECRET_KEY" validate:"required"`
+	S3Bucket    string `mapstructure:"S3_BUCKET" validate:"required"`
 }
 
 func (cnf *Config) GetPort() string {

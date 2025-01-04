@@ -2,10 +2,7 @@ package compression
 
 import (
 	"context"
-	"fmt"
 	"image-optimization-api/internal/repository"
-	"image-optimization-api/internal/service/image"
-	"image-optimization-api/pkg/imageproc"
 )
 
 func NewService(imageRepo *repository.Image) *Service {
@@ -19,22 +16,17 @@ type Service struct {
 }
 
 func (s *Service) compressImage(ctx context.Context, msg []byte) error {
-	var obj image.UploadImageRequest
+	var err error
 
-	err := obj.UnmarshalJSON(msg)
-	if err != nil {
+	op := newOperationCompressImages(s, msg)
+	if err = op.unmarshalBody(ctx); err != nil {
 		return err
 	}
-
-	if len(obj.Images) == 0 {
-		return fmt.Errorf("no images provided")
+	if err = op.compressImage(ctx); err != nil {
+		return err
 	}
-
-	for _, file := range obj.Images {
-		file.Src, err = imageproc.CompressFile(file.Src, 75)
-		if err != nil {
-			return err
-		}
+	if err = op.uploadImages(ctx); err != nil {
+		return err
 	}
 
 	return nil

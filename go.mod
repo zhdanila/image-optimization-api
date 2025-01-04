@@ -3,14 +3,18 @@ module image-optimization-api
 go 1.23.4
 
 require (
+	github.com/aws/aws-sdk-go v1.55.5
+	github.com/bufbuild/protovalidate-go v0.8.2
 	github.com/fatih/structs v1.1.0
 	github.com/go-playground/validator/v10 v10.23.0
 	github.com/google/uuid v1.4.0
+	github.com/h2non/bimg v1.1.9
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/mailru/easyjson v0.9.0
 	github.com/samber/do/v2 v2.0.0-beta.7
 	github.com/spf13/viper v1.19.0
+	github.com/streadway/amqp v1.1.0
 	go.uber.org/zap v1.27.0
 )
 
@@ -18,14 +22,13 @@ require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.1-20241127180247-a33202765966.1 // indirect
 	cel.dev/expr v0.18.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
-	github.com/bufbuild/protovalidate-go v0.8.2 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/google/cel-go v0.22.1 // indirect
-	github.com/h2non/bimg v1.1.9 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
@@ -42,7 +45,6 @@ require (
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stoewer/go-strcase v1.3.0 // indirect
-	github.com/streadway/amqp v1.1.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
