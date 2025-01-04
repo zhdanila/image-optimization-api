@@ -26,8 +26,6 @@ func (r *UploadImageRequest) ImagesToFill() []bind.UploadedFile {
 	return filledImages
 }
 
-type UploadImageResponse struct{}
-
 type GetImageRequest struct {
 	ListingId string `query:"image_id" validate:"required"`
 }
@@ -36,4 +34,11 @@ type GetImageResponse struct{}
 
 type ListImageRequest struct{}
 
-type ListImageResponse struct{}
+type ListImageResponse struct {
+	Images []ImageInfo `json:"images"`
+}
+
+type ImageInfo struct {
+	Key string `json:"key"`
+	URL string `json:"url"`
+}

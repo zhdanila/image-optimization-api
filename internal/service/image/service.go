@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/streadway/amqp"
 	"image-optimization-api/internal/repository"
+	"image-optimization-api/pkg/server"
 )
 
 func NewService(
@@ -21,7 +22,7 @@ type Service struct {
 	imageRepo *repository.Image
 }
 
-func (s *Service) UploadImage(ctx context.Context, obj *UploadImageRequest) (*UploadImageResponse, error) {
+func (s *Service) UploadImage(ctx context.Context, obj *UploadImageRequest) (*server.EmptyResponse, error) {
 	var err error
 
 	op := newOperationQueuePublish(s, obj)

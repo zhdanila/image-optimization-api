@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+type EmptyResponse struct{}
+
 type Server struct {
 	*echo.Echo
 	port string

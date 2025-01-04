@@ -1,11 +1,6 @@
 package image
 
-type Image struct{}
-
-func (u *Image) Data() []any {
-	return []any{}
-}
-
-func (u *Image) ToData() []any {
-	return []any{}
+type ImageInfo struct {
+	Key string `json:"key"`
+	URL string `json:"url"`
 }

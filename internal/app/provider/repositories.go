@@ -10,5 +10,8 @@ import (
 func ProvideImageRepository(inj do.Injector) (*repository.Image, error) {
 	cnf := do.MustInvoke[*app.Config](inj)
 
-	return repository.NewImage(do.MustInvoke[*s3.S3](inj), cnf.S3Bucket), nil
+	return repository.NewImage(do.MustInvoke[*s3.S3](inj),
+		cnf.S3Bucket,
+		cnf.S3Region,
+	), nil
 }

@@ -3,6 +3,7 @@ package image
 import (
 	"context"
 	"image-optimization-api/pkg/rabbitmq"
+	"image-optimization-api/pkg/server"
 )
 
 type operationQueuePublish struct {
@@ -32,8 +33,8 @@ func (o *operationQueuePublish) queuePublish(ctx context.Context) error {
 	return nil
 }
 
-func (o *operationQueuePublish) respond() *UploadImageResponse {
-	res := &UploadImageResponse{}
+func (o *operationQueuePublish) respond() *server.EmptyResponse {
+	res := &server.EmptyResponse{}
 
 	return res
 }

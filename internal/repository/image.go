@@ -3,20 +3,24 @@ package repository
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"image-optimization-api/internal/domain/image"
 	"image-optimization-api/pkg/bind"
 )
 
 type Image struct {
 	db         *s3.S3
 	bucketName string
+	region     string
 }
 
-func NewImage(db *s3.S3, bucketName string) *Image {
+func NewImage(db *s3.S3, bucketName, region string) *Image {
 	return &Image{
 		db:         db,
 		bucketName: bucketName,
+		region:     region,
 	}
 }
 
@@ -41,8 +45,25 @@ func (r *Image) GetImage(ctx context.Context) error {
 	return err
 }
 
-func (r *Image) ListImages(ctx context.Context) error {
-	var err error
+func (r *Image) ListImages(ctx context.Context) ([]image.ImageInfo, error) {
+	var images []image.ImageInfo
 
-	return err
+	input := &s3.ListObjectsV2Input{
+		Bucket: aws.String(r.bucketName),
+	}
+
+	result, err := r.db.ListObjectsV2WithContext(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, item := range result.Contents {
+		url := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", r.bucketName, r.region, *item.Key)
+		images = append(images, image.ImageInfo{
+			Key: *item.Key,
+			URL: url,
+		})
+	}
+
+	return images, err
 }

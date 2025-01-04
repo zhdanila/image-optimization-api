@@ -18,66 +18,7 @@ var (
 	_ easyjson.Marshaler
 )
 
-func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage(in *jlexer.Lexer, out *UploadImageResponse) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeFieldName(false)
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
-}
-func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage(out *jwriter.Writer, in UploadImageResponse) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	out.RawByte('}')
-}
-
-// MarshalJSON supports json.Marshaler interface
-func (v UploadImageResponse) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
-}
-
-// MarshalEasyJSON supports easyjson.Marshaler interface
-func (v UploadImageResponse) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage(w, v)
-}
-
-// UnmarshalJSON supports json.Unmarshaler interface
-func (v *UploadImageResponse) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage(&r, v)
-	return r.Error()
-}
-
-// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *UploadImageResponse) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage(l, v)
-}
-func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage1(in *jlexer.Lexer, out *UploadImageRequest) {
+func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage(in *jlexer.Lexer, out *UploadImageRequest) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -129,7 +70,7 @@ func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage1(in *jlexer.
 		in.Consumed()
 	}
 }
-func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage1(out *jwriter.Writer, in UploadImageRequest) {
+func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage(out *jwriter.Writer, in UploadImageRequest) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -154,25 +95,25 @@ func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage1(out *jwrite
 // MarshalJSON supports json.Marshaler interface
 func (v UploadImageRequest) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage1(&w, v)
+	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v UploadImageRequest) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage1(w, v)
+	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *UploadImageRequest) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage1(&r, v)
+	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *UploadImageRequest) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage1(l, v)
+	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage(l, v)
 }
 func easyjsonCce3d1beDecodeImageOptimizationApiPkgBind(in *jlexer.Lexer, out *bind.UploadedFile) {
 	isTopLevel := in.IsStart()
@@ -270,7 +211,7 @@ func easyjsonCce3d1beEncodeImageOptimizationApiPkgBind(out *jwriter.Writer, in b
 	}
 	out.RawByte('}')
 }
-func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage2(in *jlexer.Lexer, out *ListImageResponse) {
+func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage1(in *jlexer.Lexer, out *ListImageResponse) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -289,6 +230,29 @@ func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage2(in *jlexer.
 			continue
 		}
 		switch key {
+		case "images":
+			if in.IsNull() {
+				in.Skip()
+				out.Images = nil
+			} else {
+				in.Delim('[')
+				if out.Images == nil {
+					if !in.IsDelim(']') {
+						out.Images = make([]ImageInfo, 0, 2)
+					} else {
+						out.Images = []ImageInfo{}
+					}
+				} else {
+					out.Images = (out.Images)[:0]
+				}
+				for !in.IsDelim(']') {
+					var v7 ImageInfo
+					(v7).UnmarshalEasyJSON(in)
+					out.Images = append(out.Images, v7)
+					in.WantComma()
+				}
+				in.Delim(']')
+			}
 		default:
 			in.SkipRecursive()
 		}
@@ -299,37 +263,52 @@ func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage2(in *jlexer.
 		in.Consumed()
 	}
 }
-func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage2(out *jwriter.Writer, in ListImageResponse) {
+func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage1(out *jwriter.Writer, in ListImageResponse) {
 	out.RawByte('{')
 	first := true
 	_ = first
+	if len(in.Images) != 0 {
+		const prefix string = ",\"images\":"
+		first = false
+		out.RawString(prefix[1:])
+		{
+			out.RawByte('[')
+			for v8, v9 := range in.Images {
+				if v8 > 0 {
+					out.RawByte(',')
+				}
+				(v9).MarshalEasyJSON(out)
+			}
+			out.RawByte(']')
+		}
+	}
 	out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v ListImageResponse) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage2(&w, v)
+	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage1(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v ListImageResponse) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage2(w, v)
+	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage1(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *ListImageResponse) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage2(&r, v)
+	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage1(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *ListImageResponse) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage2(l, v)
+	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage1(l, v)
 }
-func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage3(in *jlexer.Lexer, out *ListImageRequest) {
+func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage2(in *jlexer.Lexer, out *ListImageRequest) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -358,7 +337,7 @@ func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage3(in *jlexer.
 		in.Consumed()
 	}
 }
-func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage3(out *jwriter.Writer, in ListImageRequest) {
+func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage2(out *jwriter.Writer, in ListImageRequest) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -368,24 +347,103 @@ func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage3(out *jwrite
 // MarshalJSON supports json.Marshaler interface
 func (v ListImageRequest) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage3(&w, v)
+	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage2(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v ListImageRequest) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage3(w, v)
+	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage2(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *ListImageRequest) UnmarshalJSON(data []byte) error {
+	r := jlexer.Lexer{Data: data}
+	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage2(&r, v)
+	return r.Error()
+}
+
+// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
+func (v *ListImageRequest) UnmarshalEasyJSON(l *jlexer.Lexer) {
+	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage2(l, v)
+}
+func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage3(in *jlexer.Lexer, out *ImageInfo) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "key":
+			out.Key = string(in.String())
+		case "url":
+			out.URL = string(in.String())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage3(out *jwriter.Writer, in ImageInfo) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	if in.Key != "" {
+		const prefix string = ",\"key\":"
+		first = false
+		out.RawString(prefix[1:])
+		out.String(string(in.Key))
+	}
+	if in.URL != "" {
+		const prefix string = ",\"url\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.URL))
+	}
+	out.RawByte('}')
+}
+
+// MarshalJSON supports json.Marshaler interface
+func (v ImageInfo) MarshalJSON() ([]byte, error) {
+	w := jwriter.Writer{}
+	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage3(&w, v)
+	return w.Buffer.BuildBytes(), w.Error
+}
+
+// MarshalEasyJSON supports easyjson.Marshaler interface
+func (v ImageInfo) MarshalEasyJSON(w *jwriter.Writer) {
+	easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage3(w, v)
+}
+
+// UnmarshalJSON supports json.Unmarshaler interface
+func (v *ImageInfo) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
 	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage3(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *ListImageRequest) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *ImageInfo) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage3(l, v)
 }
 func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage4(in *jlexer.Lexer, out *GetImageResponse) {
