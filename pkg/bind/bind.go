@@ -9,8 +9,6 @@ import (
 	"net/http"
 )
 
-const MaxFileSize = 10 << 20
-
 type BindOption func(c echo.Context, obj any) error
 
 func BindValidate(c echo.Context, obj any, opts ...BindOption) error {

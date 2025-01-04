@@ -9,14 +9,6 @@ import (
 	"net/http"
 )
 
-var Errs = struct {
-	OwnershipCheckFailed *Error
-	InvalidArgument      *Error
-}{
-	OwnershipCheckFailed: NewError(http.StatusPreconditionFailed, "Ownership check failed"),
-	InvalidArgument:      NewError(http.StatusBadRequest, "Invalid argument"),
-}
-
 // Error is an error that can be returned by a gRPC service. It contains gRPC status code, a message, and an
 // internal error if there is one.
 //
