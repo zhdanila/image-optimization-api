@@ -17,7 +17,6 @@ func ProvideImageService(inj do.Injector) (*image.Service, error) {
 
 func ProvideCompressionService(inj do.Injector) (*compression.Service, error) {
 	return compression.NewService(
-		do.MustInvoke[*amqp.Connection](inj),
 		do.MustInvoke[*repository.Image](inj),
 	), nil
 }

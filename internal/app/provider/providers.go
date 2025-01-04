@@ -6,6 +6,7 @@ import (
 	"github.com/streadway/amqp"
 	"image-optimization-api/internal/app"
 	"image-optimization-api/internal/app/interface/http/website"
+	"image-optimization-api/internal/service/compression"
 	"image-optimization-api/pkg/server"
 )
 
@@ -26,6 +27,13 @@ func ProvideRabbitMQConnection(inj do.Injector) (*amqp.Connection, error) {
 	}
 
 	return connection, nil
+}
+
+func ProvideQueueListener(inj do.Injector) (*compression.QueueListener, error) {
+	return compression.NewListener(
+		do.MustInvoke[*amqp.Connection](inj),
+		do.MustInvoke[*compression.Service](inj),
+	), nil
 }
 
 func ProvideWebsiteServer(inj do.Injector) (*server.Server, error) {

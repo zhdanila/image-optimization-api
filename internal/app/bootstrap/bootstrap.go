@@ -44,6 +44,7 @@ func (b *Bootstrap) Website() {
 	do.Provide(b.inj, provider.ProvideImageService)
 	do.Provide(b.inj, provider.ProvideCompressionService)
 
+	do.Provide(b.inj, provider.ProvideQueueListener)
 	do.Provide(b.inj, provider.ProvideWebsiteServer)
 
 	ctx, cancelFunc := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
@@ -57,7 +58,7 @@ func (b *Bootstrap) Website() {
 		waitForTheEnd.Add(1)
 		defer waitForTheEnd.Done()
 
-		compressionService := do.MustInvoke[*compression.Service](b.inj)
+		compressionService := do.MustInvoke[*compression.QueueListener](b.inj)
 		zap.L().Info("Starting listening RabbitMQ")
 
 		if err := compressionService.ListenUpdates(ctx); err != nil {
