@@ -2,6 +2,7 @@ package rest
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -11,27 +12,37 @@ import (
 
 // Error is an error that can be returned by a gRPC service. It contains gRPC status code, a message, and an
 // internal error if there is one.
-//
-// Should be used in gRPC services and parsed by the gRPC interceptor.
 type Error struct {
-	*echo.HTTPError
+	Code     int         `json:"code"`
+	Message  interface{} `json:"message"`
+	Internal error       `json:"-"`
+}
+
+// Error implements the error interface for the Error struct.
+func (e *Error) Error() string {
+	return fmt.Sprintf("code: %d, message: %v", e.Code, e.Message)
 }
 
 // NewError returns a new Error with the given internal error.
 func NewError(code int, message ...any) *Error {
-	return &Error{echo.NewHTTPError(code, message...)}
+	return &Error{
+		Code:    code,
+		Message: message,
+	}
 }
 
-// SetInternal sets the internal error of the HTTPError.
-func (s *Error) SetInternal(err error) *Error {
-	s.Internal = err
-	return s
+// SetInternal sets the internal error of the Error.
+func (e *Error) SetInternal(err error) *Error {
+	e.Internal = err
+	return e
 }
 
-func (s *Error) HTTPStatus() string {
-	return http.StatusText(s.Code)
+// HTTPStatus returns the HTTP status text corresponding to the code.
+func (e *Error) HTTPStatus() string {
+	return http.StatusText(e.Code)
 }
 
+// HTTPErrorHandler handles errors in the HTTP response.
 func HTTPErrorHandler(err error, c echo.Context) {
 	if c.Response().Committed {
 		return
@@ -43,14 +54,16 @@ func HTTPErrorHandler(err error, c echo.Context) {
 	case *Error:
 		he = e
 		if he.Internal != nil {
-			if herr, ok := he.Internal.(*Error); ok {
+			var herr *Error
+			if errors.As(he.Internal, &herr) {
 				he = herr
 			}
 		}
 	case *echo.HTTPError:
 		he = NewError(e.Code, e.Message)
 		if he.Internal != nil {
-			if herr, ok := he.Internal.(*Error); ok {
+			var herr *Error
+			if errors.As(he.Internal, &herr) {
 				he = herr
 			}
 		}
@@ -61,18 +74,13 @@ func HTTPErrorHandler(err error, c echo.Context) {
 		)
 	}
 
-	// Issue #1426
 	code := he.Code
 	message := he.Message
 
 	switch m := he.Message.(type) {
 	case string:
 		zap.L().Error(fmt.Sprintf("HTTP error: %v", err))
-		//if e.Debug {
-		//	message = echo.Map{"message": m, "error": err.Error()}
-		//} else {
 		message = echo.Map{"message": m}
-		//}
 	case json.Marshaler:
 		// do nothing - this type knows how to format itself to JSON
 	case validator.ValidationErrors:
@@ -91,12 +99,12 @@ func HTTPErrorHandler(err error, c echo.Context) {
 	}
 
 	// Send response
-	if c.Request().Method == http.MethodHead { // Issue #608
+	if c.Request().Method == http.MethodHead {
 		err = c.NoContent(he.Code)
 	} else {
 		err = c.JSON(code, message)
 	}
 	if err != nil {
-		//e.Logger.Error(err)
+		zap.L().Error("Error sending response", zap.Error(err))
 	}
 }

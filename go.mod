@@ -7,10 +7,9 @@ require (
 	github.com/bufbuild/protovalidate-go v0.8.2
 	github.com/fatih/structs v1.1.0
 	github.com/go-playground/validator/v10 v10.23.0
-	github.com/google/uuid v1.4.0
 	github.com/h2non/bimg v1.1.9
-	github.com/jmoiron/sqlx v1.4.0
 	github.com/labstack/echo/v4 v4.13.3
+	github.com/labstack/gommon v0.4.2
 	github.com/mailru/easyjson v0.9.0
 	github.com/samber/do/v2 v2.0.0-beta.7
 	github.com/spf13/viper v1.19.0
@@ -30,7 +29,6 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
-	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

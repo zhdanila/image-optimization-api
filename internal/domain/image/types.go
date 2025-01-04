@@ -1,12 +1,12 @@
 package image
 
-type ImageGroup string
+type Group string
 
 const (
-	AllowedImageGroupGeneral ImageGroup = "images"
+	AllowedImageGroupGeneral Group = "images"
 )
 
-func ImageGroups() []string {
+func Groups() []string {
 	return []string{
 		string(AllowedImageGroupGeneral),
 	}

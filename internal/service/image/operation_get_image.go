@@ -10,7 +10,7 @@ type operationGetImage struct {
 	*Service
 	imageID string
 	obj     *GetImageRequest
-	ent     *image.ImageInfo
+	ent     *image.Info
 }
 
 func newOperationGetImage(s *Service, obj *GetImageRequest) *operationGetImage {

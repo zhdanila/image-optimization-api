@@ -36,7 +36,7 @@ func (s *Image) UploadImage(c echo.Context) error {
 		return err
 	}
 
-	for _, group := range image2.ImageGroups() {
+	for _, group := range image2.Groups() {
 		if err = bind.BindValidate(c, &obj, bind.FromMultipartForm(group, obj.ImagesToFill())); err != nil {
 			return err
 		}

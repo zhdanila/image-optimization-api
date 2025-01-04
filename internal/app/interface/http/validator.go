@@ -9,7 +9,7 @@ func CustomValidator() *Validator {
 }
 
 func NewValidator() *Validator {
-	return &Validator{validator.New()}
+	return &Validator{validator: validator.New()}
 }
 
 type Validator struct {
@@ -18,8 +18,4 @@ type Validator struct {
 
 func (v *Validator) Validate(i any) error {
 	return v.validator.Struct(i)
-}
-
-func (v *Validator) Register(tag string, fn validator.Func) error {
-	return v.validator.RegisterValidation(tag, fn)
 }

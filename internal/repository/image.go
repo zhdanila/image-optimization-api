@@ -39,7 +39,7 @@ func (r *Image) UploadImages(ctx context.Context, images []bind.UploadedFile) er
 	return nil
 }
 
-func (r *Image) GetImage(ctx context.Context, id string) (*image.ImageInfo, error) {
+func (r *Image) GetImage(ctx context.Context, id string) (*image.Info, error) {
 	headObjectInput := &s3.HeadObjectInput{
 		Bucket: aws.String(r.bucketName),
 		Key:    aws.String(id),
@@ -52,14 +52,14 @@ func (r *Image) GetImage(ctx context.Context, id string) (*image.ImageInfo, erro
 
 	url := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", r.bucketName, r.region, id)
 
-	return &image.ImageInfo{
+	return &image.Info{
 		Key: id,
 		URL: url,
 	}, nil
 }
 
-func (r *Image) ListImages(ctx context.Context) ([]image.ImageInfo, error) {
-	var images []image.ImageInfo
+func (r *Image) ListImages(ctx context.Context) ([]image.Info, error) {
+	var images []image.Info
 
 	input := &s3.ListObjectsV2Input{
 		Bucket: aws.String(r.bucketName),
@@ -72,7 +72,7 @@ func (r *Image) ListImages(ctx context.Context) ([]image.ImageInfo, error) {
 
 	for _, item := range result.Contents {
 		url := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", r.bucketName, r.region, *item.Key)
-		images = append(images, image.ImageInfo{
+		images = append(images, image.Info{
 			Key: *item.Key,
 			URL: url,
 		})

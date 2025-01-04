@@ -8,7 +8,7 @@ import (
 type operationListImages struct {
 	*Service
 	obj  *ListImageRequest
-	ents []image.ImageInfo
+	ents []image.Info
 }
 
 func newOperationListImages(s *Service, obj *ListImageRequest) *operationListImages {
