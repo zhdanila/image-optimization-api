@@ -2,31 +2,37 @@ package image
 
 import (
 	"context"
+	"image-optimization-api/pkg/rabbitmq"
 )
 
-type operationUploadImage struct {
+type operationQueuePublish struct {
 	*Service
 	obj *UploadImageRequest
 }
 
-func newOperationUploadImage(s *Service, obj *UploadImageRequest) *operationUploadImage {
-	return &operationUploadImage{
+func newOperationQueuePublish(s *Service, obj *UploadImageRequest) *operationQueuePublish {
+	return &operationQueuePublish{
 		Service: s,
 		obj:     obj,
 	}
 }
 
-func (o *operationUploadImage) uploadImage(ctx context.Context) error {
+func (o *operationQueuePublish) queuePublish(ctx context.Context) error {
 	var err error
 
-	if err = o.imageRepo.UploadImage(ctx); err != nil {
+	body, err := o.obj.MarshalJSON()
+	if err != nil {
 		return err
 	}
 
-	return err
+	if err = rabbitmq.PublishToQueue(o.conn, body); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (o *operationUploadImage) respond() *UploadImageResponse {
+func (o *operationQueuePublish) respond() *UploadImageResponse {
 	res := &UploadImageResponse{}
 
 	return res

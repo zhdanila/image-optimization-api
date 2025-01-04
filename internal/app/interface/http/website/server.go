@@ -24,7 +24,7 @@ func NewServer(cnf *app.Config, inj do.Injector) *server.Server {
 
 	nameGroup := server.Group("/api")
 
-	handler.NewAuth(
+	handler.NewImage(
 		do.MustInvoke[*image.Service](inj),
 	).Register(nameGroup)
 

@@ -7,6 +7,7 @@ import (
 	easyjson "github.com/mailru/easyjson"
 	jlexer "github.com/mailru/easyjson/jlexer"
 	jwriter "github.com/mailru/easyjson/jwriter"
+	bind "image-optimization-api/pkg/bind"
 )
 
 // suppress unused package warning
@@ -95,6 +96,29 @@ func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage1(in *jlexer.
 			continue
 		}
 		switch key {
+		case "Images":
+			if in.IsNull() {
+				in.Skip()
+				out.Images = nil
+			} else {
+				in.Delim('[')
+				if out.Images == nil {
+					if !in.IsDelim(']') {
+						out.Images = make([]bind.UploadedFile, 0, 0)
+					} else {
+						out.Images = []bind.UploadedFile{}
+					}
+				} else {
+					out.Images = (out.Images)[:0]
+				}
+				for !in.IsDelim(']') {
+					var v1 bind.UploadedFile
+					easyjsonCce3d1beDecodeImageOptimizationApiPkgBind(in, &v1)
+					out.Images = append(out.Images, v1)
+					in.WantComma()
+				}
+				in.Delim(']')
+			}
 		default:
 			in.SkipRecursive()
 		}
@@ -109,6 +133,21 @@ func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage1(out *jwrite
 	out.RawByte('{')
 	first := true
 	_ = first
+	if len(in.Images) != 0 {
+		const prefix string = ",\"Images\":"
+		first = false
+		out.RawString(prefix[1:])
+		{
+			out.RawByte('[')
+			for v2, v3 := range in.Images {
+				if v2 > 0 {
+					out.RawByte(',')
+				}
+				easyjsonCce3d1beEncodeImageOptimizationApiPkgBind(out, v3)
+			}
+			out.RawByte(']')
+		}
+	}
 	out.RawByte('}')
 }
 
@@ -134,6 +173,102 @@ func (v *UploadImageRequest) UnmarshalJSON(data []byte) error {
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *UploadImageRequest) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage1(l, v)
+}
+func easyjsonCce3d1beDecodeImageOptimizationApiPkgBind(in *jlexer.Lexer, out *bind.UploadedFile) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "filename":
+			out.FileName = string(in.String())
+		case "ContentType":
+			out.ContentType = string(in.String())
+		case "Size":
+			out.Size = int64(in.Int64())
+		case "Src":
+			if in.IsNull() {
+				in.Skip()
+				out.Src = nil
+			} else {
+				out.Src = in.Bytes()
+			}
+		case "Tag":
+			out.Tag = string(in.String())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjsonCce3d1beEncodeImageOptimizationApiPkgBind(out *jwriter.Writer, in bind.UploadedFile) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	if in.FileName != "" {
+		const prefix string = ",\"filename\":"
+		first = false
+		out.RawString(prefix[1:])
+		out.String(string(in.FileName))
+	}
+	if in.ContentType != "" {
+		const prefix string = ",\"ContentType\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.ContentType))
+	}
+	if in.Size != 0 {
+		const prefix string = ",\"Size\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Int64(int64(in.Size))
+	}
+	if len(in.Src) != 0 {
+		const prefix string = ",\"Src\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Base64Bytes(in.Src)
+	}
+	if in.Tag != "" {
+		const prefix string = ",\"Tag\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.Tag))
+	}
+	out.RawByte('}')
 }
 func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage2(in *jlexer.Lexer, out *ListImageResponse) {
 	isTopLevel := in.IsStart()

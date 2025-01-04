@@ -24,7 +24,6 @@ func ProvideRabbitMQConnection(inj do.Injector) (*amqp.Connection, error) {
 	if err != nil {
 		panic(err)
 	}
-	defer connection.Close()
 
 	return connection, nil
 }

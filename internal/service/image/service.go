@@ -2,27 +2,31 @@ package image
 
 import (
 	"context"
+	"github.com/streadway/amqp"
 	"image-optimization-api/internal/repository"
 )
 
 func NewService(
+	conn *amqp.Connection,
 	imageRepo *repository.Image,
 ) *Service {
 	return &Service{
+		conn:      conn,
 		imageRepo: imageRepo,
 	}
 }
 
 type Service struct {
+	conn      *amqp.Connection
 	imageRepo *repository.Image
 }
 
 func (s *Service) UploadImage(ctx context.Context, obj *UploadImageRequest) (*UploadImageResponse, error) {
 	var err error
 
-	op := newOperationUploadImage(s, obj)
+	op := newOperationQueuePublish(s, obj)
 
-	if err = op.uploadImage(ctx); err != nil {
+	if err = op.queuePublish(ctx); err != nil {
 		return nil, err
 	}
 

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
+	image2 "image-optimization-api/internal/domain/image"
 	"image-optimization-api/internal/service/image"
 	"image-optimization-api/pkg/bind"
 	"net/http"
@@ -11,7 +12,7 @@ type Image struct {
 	imageService *image.Service
 }
 
-func NewAuth(imageService *image.Service) *Image {
+func NewImage(imageService *image.Service) *Image {
 	return &Image{
 		imageService: imageService,
 	}
@@ -31,8 +32,14 @@ func (s *Image) UploadImage(c echo.Context) error {
 		obj image.UploadImageRequest
 	)
 
-	if err = bind.BindValidate(c, &obj, bind.FromMultipartFile(bind.FieldNameImage)); err != nil {
+	if err = bind.BindValidate(c, &obj, bind.FromHeaders()); err != nil {
 		return err
+	}
+
+	for _, group := range image2.ImageGroups() {
+		if err = bind.BindValidate(c, &obj, bind.FromMultipartForm(group, obj.ImagesToFill())); err != nil {
+			return err
+		}
 	}
 
 	res, err := s.imageService.UploadImage(c.Request().Context(), &obj)

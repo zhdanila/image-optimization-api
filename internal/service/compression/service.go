@@ -6,6 +6,8 @@ import (
 	"github.com/streadway/amqp"
 	"go.uber.org/zap"
 	"image-optimization-api/internal/repository"
+	"image-optimization-api/internal/service/image"
+	"image-optimization-api/pkg/rabbitmq"
 )
 
 func NewService(
@@ -24,52 +26,39 @@ type Service struct {
 }
 
 func (s *Service) ListenUpdates(ctx context.Context) error {
-	ch, err := s.conn.Channel()
-	if err != nil {
-		return err
-	}
-	defer ch.Close()
-
-	queue, err := ch.QueueDeclare(
-		"image_optimization_queue", // Queue name
-		true,                       // Durable
-		false,                      // Auto-delete
-		false,                      // Exclusive
-		false,                      // No-wait
-		nil,                        // Arguments
-	)
+	msgs, err := rabbitmq.NewConsumer(s.conn)
 	if err != nil {
 		return err
 	}
 
-	msgs, err := ch.Consume(
-		queue.Name, // Queue name
-		"",         // Consumer name
-		true,       // Auto-ack
-		false,      // Exclusive
-		false,      // No-local
-		false,      // No-wait
-		nil,        // Arguments
-	)
-	if err != nil {
-		return err
-	}
-
-	for {
-		select {
-		case <-ctx.Done():
-			return nil
-		case msg := <-msgs:
-			err = s.processMessage(ctx)
+	go func() {
+		for msg := range msgs {
+			err = s.processMessage(ctx, msg.Body)
 			if err != nil {
 				zap.L().Error(fmt.Sprintf("Failed to process image: %s", err.Error()))
 			} else {
-				zap.L().Error(fmt.Sprintf("Successfully processed image: %s", msg.Body))
+				zap.L().Info(fmt.Sprintf("Successfully processed image: %s", msg.Body))
 			}
 		}
-	}
+	}()
+
+	go func() {
+		<-ctx.Done()
+		zap.L().Info("Shutting down consumer...")
+	}()
+
+	return nil
 }
 
-func (s *Service) processMessage(ctx context.Context) error {
+func (s *Service) processMessage(ctx context.Context, msg []byte) error {
+	var obj image.UploadImageRequest
 
+	err := obj.UnmarshalJSON(msg)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(obj)
+
+	return nil
 }

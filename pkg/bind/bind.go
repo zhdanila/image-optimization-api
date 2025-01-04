@@ -2,11 +2,11 @@ package bind
 
 import (
 	"errors"
+	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
-	"mime/multipart"
+	"io"
 	"net/http"
-	"reflect"
 )
 
 const MaxFileSize = 10 << 20
@@ -53,43 +53,81 @@ func FromQuery() func(c echo.Context, obj any) error {
 	}
 }
 
-type FieldName string
-
-func (f FieldName) String() string {
-	return string(f)
-}
-
-const (
-	FieldNameImage FieldName = "image"
-)
-
-func FromMultipartFile(fieldName FieldName) func(c echo.Context, obj any) error {
+func FromMultipartForm(arg ...any) func(c echo.Context, obj any) error {
 	return func(c echo.Context, obj any) error {
-		err := c.Request().ParseMultipartForm(MaxFileSize)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, "Failed to process form")
+		if arg == nil {
+			return nil
+		}
+		if len(arg)%2 != 0 {
+			return fmt.Errorf("invalid number of arguments")
 		}
 
-		fileHeader, err := c.FormFile(fieldName.String())
-		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, "Failed to retrieve file")
-		}
+		for i := 0; i < len(arg); i += 2 {
+			key := arg[i].(string)
+			form, err := c.MultipartForm()
+			if err != nil {
+				return err
+			}
+			files := form.File[key]
 
-		v := reflect.ValueOf(obj).Elem()
-		if v.Kind() != reflect.Struct {
-			return echo.NewHTTPError(http.StatusBadRequest, "Invalid object type")
-		}
+			switch dst := arg[i+1].(type) {
+			case []UploadedFile:
+				maxSize := len(dst)
+				for i, file := range files {
+					src, err := file.Open()
+					if err != nil {
+						return err
+					}
+					defer src.Close()
 
-		for i := 0; i < v.NumField(); i++ {
-			field := v.Field(i)
-			fieldType := v.Type().Field(i)
+					fileBytes, err := io.ReadAll(src)
+					if err != nil {
+						return err
+					}
 
-			if field.Type() == reflect.TypeOf((*multipart.FileHeader)(nil)) && fieldType.Tag.Get("form") == fieldName.String() {
-				field.Set(reflect.ValueOf(fileHeader))
-				return nil
+					dst[i] = UploadedFile{
+						FileName:    file.Filename,
+						ContentType: file.Header.Get("Content-Type"),
+						Size:        file.Size,
+						Src:         fileBytes,
+						Tag:         key,
+					}
+					if i == maxSize-1 {
+						break
+					}
+				}
+			case *UploadedFile:
+				for _, file := range files {
+					src, err := file.Open()
+					if err != nil {
+						return err
+					}
+					defer src.Close()
+
+					fileBytes, err := io.ReadAll(src)
+					if err != nil {
+						return err
+					}
+
+					if dst == nil {
+						return fmt.Errorf("invalid destination")
+					}
+					dst.FileName = file.Filename
+					dst.ContentType = file.Header.Get("Content-Type")
+					dst.Size = file.Size
+					dst.Src = fileBytes
+				}
 			}
 		}
 
-		return echo.NewHTTPError(http.StatusBadRequest, "No matching field found for file")
+		return nil
 	}
+}
+
+type UploadedFile struct {
+	FileName    string `json:"filename"`
+	ContentType string `form:"content_type"`
+	Size        int64  `form:"size"`
+	Src         []byte `form:"src"`
+	Tag         string `form:"tag"`
 }

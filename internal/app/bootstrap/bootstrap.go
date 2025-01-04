@@ -61,7 +61,7 @@ func (b *Bootstrap) Website() {
 		zap.L().Info("Starting listening RabbitMQ")
 
 		if err := compressionService.ListenUpdates(ctx); err != nil {
-			zap.L().Error("RabbitMQ has been stopped, ", zap.Error(err))
+			zap.L().Error("RabbitMQ listening has been stopped, ", zap.Error(err))
 		}
 	}()
 
