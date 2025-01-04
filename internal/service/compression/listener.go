@@ -32,7 +32,7 @@ func (s *QueueListener) ListenUpdates(ctx context.Context) error {
 			if err != nil {
 				zap.L().Error(fmt.Sprintf("Failed to compress images: %s", err.Error()))
 			} else {
-				zap.L().Info(fmt.Sprintf("Successfully compressed image: %s", msg.Body))
+				zap.L().Info(fmt.Sprintf("Successfully compressed image"))
 			}
 		}
 	}()

@@ -26,15 +26,17 @@ func (o *operationCompressImages) unmarshalBody(ctx context.Context) error {
 		return err
 	}
 
+	if obj.Images == nil || len(obj.Images) == 0 {
+		return errs.NoImagesProvided
+	}
+
+	o.obj = &obj
+
 	return nil
 }
 
 func (o *operationCompressImages) compressImage(ctx context.Context) error {
 	var err error
-
-	if len(o.obj.Images) == 0 {
-		return errs.NoImagesProvided
-	}
 
 	o.compressedImages, err = imageproc.GetCompressedImages(o.obj.Images)
 	if err != nil {

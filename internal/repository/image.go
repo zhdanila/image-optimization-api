@@ -1,27 +1,38 @@
 package repository
 
 import (
+	"bytes"
 	"context"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"image-optimization-api/internal/domain/image"
 	"image-optimization-api/pkg/bind"
-	"image-optimization-api/pkg/schema"
 )
 
 type Image struct {
-	schema.Repository[image.Image]
+	db         *s3.S3
+	bucketName string
 }
 
-func NewImage(db *s3.S3) *Image {
+func NewImage(db *s3.S3, bucketName string) *Image {
 	return &Image{
-		Repository: schema.NewRepository(db, image.Image{}),
+		db:         db,
+		bucketName: bucketName,
 	}
 }
 
 func (r *Image) UploadImages(ctx context.Context, images []bind.UploadedFile) error {
-	var err error
-
-	return err
+	for _, img := range images {
+		_, err := r.db.PutObjectWithContext(ctx, &s3.PutObjectInput{
+			Bucket:      aws.String("amazon-images-storage"),
+			Key:         aws.String(img.FileName),
+			Body:        bytes.NewReader(img.Src),
+			ContentType: aws.String(img.ContentType),
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (r *Image) GetImage(ctx context.Context) error {
