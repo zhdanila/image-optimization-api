@@ -27,7 +27,7 @@ func NewImage(db *s3.S3, bucketName, region string) *Image {
 func (r *Image) UploadImages(ctx context.Context, images []bind.UploadedFile) error {
 	for _, img := range images {
 		_, err := r.db.PutObjectWithContext(ctx, &s3.PutObjectInput{
-			Bucket:      aws.String("amazon-images-storage"),
+			Bucket:      aws.String(r.bucketName),
 			Key:         aws.String(img.FileName),
 			Body:        bytes.NewReader(img.Src),
 			ContentType: aws.String(img.ContentType),
@@ -39,10 +39,23 @@ func (r *Image) UploadImages(ctx context.Context, images []bind.UploadedFile) er
 	return nil
 }
 
-func (r *Image) GetImage(ctx context.Context) error {
-	var err error
+func (r *Image) GetImage(ctx context.Context, id string) (*image.ImageInfo, error) {
+	headObjectInput := &s3.HeadObjectInput{
+		Bucket: aws.String(r.bucketName),
+		Key:    aws.String(id),
+	}
 
-	return err
+	_, err := r.db.HeadObjectWithContext(ctx, headObjectInput)
+	if err != nil {
+		return nil, err
+	}
+
+	url := fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", r.bucketName, r.region, id)
+
+	return &image.ImageInfo{
+		Key: id,
+		URL: url,
+	}, nil
 }
 
 func (r *Image) ListImages(ctx context.Context) ([]image.ImageInfo, error) {

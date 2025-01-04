@@ -13,10 +13,30 @@ func (cq CompressionQuality) Int() int {
 }
 
 const (
-	CompressionQualityHigh   CompressionQuality = 75
-	CompressionQualityMedium CompressionQuality = 50
-	CompressionQualityLow    CompressionQuality = 25
+	CompressionQualityOriginal CompressionQuality = 100
+	CompressionQualityHigh     CompressionQuality = 75
+	CompressionQualityMedium   CompressionQuality = 50
+	CompressionQualityLow      CompressionQuality = 25
 )
+
+func IntToCompressionQuality(value int) CompressionQuality {
+	switch value {
+	case 100:
+		return CompressionQualityOriginal
+	case 75:
+		return CompressionQualityHigh
+	case 50:
+		return CompressionQualityMedium
+	case 25:
+		return CompressionQualityLow
+	default:
+		return CompressionQualityHigh
+	}
+}
+
+func GetAllCompressionQualities() []CompressionQuality {
+	return []CompressionQuality{CompressionQualityHigh, CompressionQualityMedium, CompressionQualityLow, CompressionQualityOriginal}
+}
 
 func compressFile(imageData []byte, compressionQuality CompressionQuality) ([]byte, error) {
 	img := bimg.NewImage(imageData)
@@ -38,30 +58,18 @@ func GetCompressedImages(images []bind.UploadedFile) ([]bind.UploadedFile, error
 
 	for _, file := range images {
 		if len(file.Src) == 0 {
-			return compressedImages, nil
-		}
-		compressedImages = append(compressedImages, bind.UploadedFile{
-			FileName:    file.FileName,
-			ContentType: file.ContentType,
-			Size:        file.Size,
-			Src:         file.Src,
-			Tag:         file.Tag,
-		})
-
-		qualities := map[string]CompressionQuality{
-			"high":   CompressionQualityHigh,
-			"medium": CompressionQualityMedium,
-			"low":    CompressionQualityLow,
+			continue
 		}
 
-		for prefix, quality := range qualities {
+		qualities := GetAllCompressionQualities()
+		for _, quality := range qualities {
 			compressedSrc, err := compressFile(file.Src, quality)
 			if err != nil {
 				return nil, err
 			}
 
 			compressedImages = append(compressedImages, bind.UploadedFile{
-				FileName:    fmt.Sprintf("%s_%s", prefix, file.FileName),
+				FileName:    GenerateImageID(file.FileName, quality),
 				ContentType: file.ContentType,
 				Size:        int64(len(compressedSrc)),
 				Src:         compressedSrc,
@@ -71,4 +79,15 @@ func GetCompressedImages(images []bind.UploadedFile) ([]bind.UploadedFile, error
 	}
 
 	return compressedImages, nil
+}
+
+func GenerateImageID(fileName string, quality CompressionQuality) string {
+	qualityStr := map[CompressionQuality]string{
+		CompressionQualityOriginal: "",
+		CompressionQualityHigh:     "high_",
+		CompressionQualityMedium:   "medium_",
+		CompressionQualityLow:      "low_",
+	}[quality]
+
+	return fmt.Sprintf("%s%s", qualityStr, fileName)
 }

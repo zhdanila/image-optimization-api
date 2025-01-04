@@ -27,10 +27,13 @@ func (r *UploadImageRequest) ImagesToFill() []bind.UploadedFile {
 }
 
 type GetImageRequest struct {
-	ListingId string `query:"image_id" validate:"required"`
+	ImageID            string `param:"image_id" validate:"required"`
+	CompressionQuality int    `query:"quality" validate:"omitempty,oneof=100 75 50 25"`
 }
 
-type GetImageResponse struct{}
+type GetImageResponse struct {
+	Image ImageInfo `json:"image"`
+}
 
 type ListImageRequest struct{}
 

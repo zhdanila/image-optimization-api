@@ -465,6 +465,8 @@ func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage4(in *jlexer.
 			continue
 		}
 		switch key {
+		case "image":
+			(out.Image).UnmarshalEasyJSON(in)
 		default:
 			in.SkipRecursive()
 		}
@@ -479,6 +481,12 @@ func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage4(out *jwrite
 	out.RawByte('{')
 	first := true
 	_ = first
+	if true {
+		const prefix string = ",\"image\":"
+		first = false
+		out.RawString(prefix[1:])
+		(in.Image).MarshalEasyJSON(out)
+	}
 	out.RawByte('}')
 }
 
@@ -524,8 +532,10 @@ func easyjsonCce3d1beDecodeImageOptimizationApiInternalServiceImage5(in *jlexer.
 			continue
 		}
 		switch key {
-		case "ListingId":
-			out.ListingId = string(in.String())
+		case "ImageID":
+			out.ImageID = string(in.String())
+		case "CompressionQuality":
+			out.CompressionQuality = int(in.Int())
 		default:
 			in.SkipRecursive()
 		}
@@ -540,11 +550,21 @@ func easyjsonCce3d1beEncodeImageOptimizationApiInternalServiceImage5(out *jwrite
 	out.RawByte('{')
 	first := true
 	_ = first
-	if in.ListingId != "" {
-		const prefix string = ",\"ListingId\":"
+	if in.ImageID != "" {
+		const prefix string = ",\"ImageID\":"
 		first = false
 		out.RawString(prefix[1:])
-		out.String(string(in.ListingId))
+		out.String(string(in.ImageID))
+	}
+	if in.CompressionQuality != 0 {
+		const prefix string = ",\"CompressionQuality\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Int(int(in.CompressionQuality))
 	}
 	out.RawByte('}')
 }

@@ -39,6 +39,9 @@ func (s *Service) GetImage(ctx context.Context, obj *GetImageRequest) (*GetImage
 
 	op := newOperationGetImage(s, obj)
 
+	if err = op.prepareImageID(ctx); err != nil {
+		return nil, err
+	}
 	if err = op.getImage(ctx); err != nil {
 		return nil, err
 	}
