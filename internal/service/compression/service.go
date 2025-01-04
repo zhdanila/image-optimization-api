@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"image-optimization-api/internal/repository"
 	"image-optimization-api/internal/service/image"
+	"image-optimization-api/pkg/imageproc"
 )
 
 func NewService(imageRepo *repository.Image) *Service {
@@ -25,7 +26,16 @@ func (s *Service) compressImage(ctx context.Context, msg []byte) error {
 		return err
 	}
 
-	fmt.Println(obj)
+	if len(obj.Images) == 0 {
+		return fmt.Errorf("no images provided")
+	}
+
+	for _, file := range obj.Images {
+		file.Src, err = imageproc.CompressFile(file.Src, 75)
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }

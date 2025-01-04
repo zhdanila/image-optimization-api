@@ -16,7 +16,7 @@ func NewImage() *Image {
 	}
 }
 
-func (r *Image) UploadImage(ctx context.Context) error {
+func (r *Image) SaveImage(ctx context.Context) error {
 	var err error
 
 	return err
