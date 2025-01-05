@@ -3,7 +3,6 @@ package bootstrap
 import (
 	"context"
 	"errors"
-	"github.com/fatih/structs"
 	"github.com/samber/do/v2"
 	"go.uber.org/zap"
 	"image-optimization-api/internal/app"
@@ -32,8 +31,6 @@ type Bootstrap struct {
 }
 
 func (b *Bootstrap) Website() {
-	structs.DefaultTagName = `db`
-
 	do.ProvideValue(b.inj, do.MustInvoke[*app.Config](b.inj).Env)
 
 	do.Provide(b.inj, provider.ProvideProtoValidator)
