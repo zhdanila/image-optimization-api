@@ -5,6 +5,7 @@ import (
 	image2 "image-optimization-api/internal/domain/image"
 	"image-optimization-api/internal/service/image"
 	"image-optimization-api/pkg/bind"
+	_ "image-optimization-api/pkg/server"
 	"net/http"
 )
 
@@ -26,6 +27,14 @@ func (s *Image) Register(server *echo.Group) {
 	group.GET("/list", s.ListImages)
 }
 
+// UploadImage @Summary Upload Image
+// @Description Uploads an image
+// @Tags Images
+// @ID upload-image
+// @Produce  json
+// @Param images formData file true "Images to upload"
+// @Success 200 {object} server.EmptyResponse
+// @Router /image [post]
 func (s *Image) UploadImage(c echo.Context) error {
 	var (
 		err error
@@ -50,6 +59,14 @@ func (s *Image) UploadImage(c echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
+// GetImage @Summary Get Image
+// @Description Retrieves an image by ID
+// @Tags Images
+// @ID get-image
+// @Produce  json
+// @Param image_id path string true "Image ID"
+// @Success 200 {object} image.GetImageResponse
+// @Router /image/{image_id} [get]
 func (s *Image) GetImage(c echo.Context) error {
 	var (
 		err error
@@ -68,6 +85,13 @@ func (s *Image) GetImage(c echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
+// ListImages @Summary List Images
+// @Description Retrieves a list of images
+// @Tags Images
+// @ID list-images
+// @Produce  json
+// @Success 200 {object} image.ListImageResponse
+// @Router /image/list [get]
 func (s *Image) ListImages(c echo.Context) error {
 	var (
 		err error

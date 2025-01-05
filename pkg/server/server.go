@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-type EmptyResponse struct{}
+type EmptyResponse = struct{}
 
 type Server struct {
 	*echo.Echo

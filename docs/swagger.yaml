@@ -1,0 +1,77 @@
+definitions:
+  image-optimization-api_internal_service_image.GetImageResponse:
+    properties:
+      image:
+        $ref: '#/definitions/image-optimization-api_internal_service_image.ImageInfo'
+    type: object
+  image-optimization-api_internal_service_image.ImageInfo:
+    properties:
+      key:
+        type: string
+      url:
+        type: string
+    type: object
+  image-optimization-api_internal_service_image.ListImageResponse:
+    properties:
+      images:
+        items:
+          $ref: '#/definitions/image-optimization-api_internal_service_image.ImageInfo'
+        type: array
+    type: object
+  image-optimization-api_pkg_server.EmptyResponse:
+    type: object
+info:
+  contact: {}
+paths:
+  /image:
+    post:
+      description: Uploads an image
+      operationId: upload-image
+      parameters:
+      - description: Images to upload
+        in: formData
+        name: images
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/image-optimization-api_pkg_server.EmptyResponse'
+      tags:
+      - Images
+  /image/{image_id}:
+    get:
+      description: Retrieves an image by ID
+      operationId: get-image
+      parameters:
+      - description: Image ID
+        in: path
+        name: image_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/image-optimization-api_internal_service_image.GetImageResponse'
+      tags:
+      - Images
+  /image/list:
+    get:
+      description: Retrieves a list of images
+      operationId: list-images
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/image-optimization-api_internal_service_image.ListImageResponse'
+      tags:
+      - Images
+swagger: "2.0"

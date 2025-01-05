@@ -6,3 +6,6 @@ install-easyjson:
 
 geneasyj: install-easyjson
 	easyjson -all -omit_empty internal/service/*/objects.go
+
+swagger:
+	swag init --parseDependency --parseInternal -g cmd/server/main.go
