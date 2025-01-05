@@ -4,7 +4,7 @@
         "contact": {}
     },
     "paths": {
-        "/image": {
+        "/api/image": {
             "post": {
                 "description": "Uploads an image",
                 "produces": [
@@ -33,7 +33,7 @@
                 }
             }
         },
-        "/image/list": {
+        "/api/image/list": {
             "get": {
                 "description": "Retrieves a list of images",
                 "produces": [
@@ -53,7 +53,7 @@
                 }
             }
         },
-        "/image/{image_id}": {
+        "/api/image/{image_id}": {
             "get": {
                 "description": "Retrieves an image by ID",
                 "produces": [
@@ -70,6 +70,12 @@
                         "name": "image_id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Compression Quality (one of: 100, 75, 50, 25)",
+                        "name": "quality",
+                        "in": "query"
                     }
                 ],
                 "responses": {

@@ -22,6 +22,7 @@ func SetCORS() func(next echo.HandlerFunc) echo.HandlerFunc {
 	origins = []string{
 		"http://localhost:8000",
 		"http://localhost:63342",
+		"http://localhost:61112",
 	}
 
 	return middleware.CORSWithConfig(middleware.CORSConfig{

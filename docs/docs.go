@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/image": {
+        "/api/image": {
             "post": {
                 "description": "Uploads an image",
                 "produces": [
@@ -44,7 +44,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/image/list": {
+        "/api/image/list": {
             "get": {
                 "description": "Retrieves a list of images",
                 "produces": [
@@ -64,7 +64,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/image/{image_id}": {
+        "/api/image/{image_id}": {
             "get": {
                 "description": "Retrieves an image by ID",
                 "produces": [
@@ -81,6 +81,12 @@ const docTemplate = `{
                         "name": "image_id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Compression Quality (one of: 100, 75, 50, 25)",
+                        "name": "quality",
+                        "in": "query"
                     }
                 ],
                 "responses": {

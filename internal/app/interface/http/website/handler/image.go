@@ -34,7 +34,7 @@ func (s *Image) Register(server *echo.Group) {
 // @Produce  json
 // @Param images formData file true "Images to upload"
 // @Success 200 {object} server.EmptyResponse
-// @Router /image [post]
+// @Router /api/image [post]
 func (s *Image) UploadImage(c echo.Context) error {
 	var (
 		err error
@@ -65,8 +65,9 @@ func (s *Image) UploadImage(c echo.Context) error {
 // @ID get-image
 // @Produce  json
 // @Param image_id path string true "Image ID"
+// @Param quality query int false "Compression Quality (one of: 100, 75, 50, 25)"
 // @Success 200 {object} image.GetImageResponse
-// @Router /image/{image_id} [get]
+// @Router /api/image/{image_id} [get]
 func (s *Image) GetImage(c echo.Context) error {
 	var (
 		err error
@@ -91,7 +92,7 @@ func (s *Image) GetImage(c echo.Context) error {
 // @ID list-images
 // @Produce  json
 // @Success 200 {object} image.ListImageResponse
-// @Router /image/list [get]
+// @Router /api/image/list [get]
 func (s *Image) ListImages(c echo.Context) error {
 	var (
 		err error
