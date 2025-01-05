@@ -68,13 +68,6 @@ Uploads an image.
 
 - **200 OK**: A successful response with no content.
 
-```json
-{
-  "status": "success",
-  "message": "Image uploaded successfully"
-}
-```
-
 ---
 
 ### GET /api/image/list

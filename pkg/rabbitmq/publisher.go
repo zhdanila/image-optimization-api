@@ -12,7 +12,11 @@ func PublishToQueue(conn *amqp.Connection, body []byte) error {
 	if err != nil {
 		return err
 	}
-	defer ch.Close()
+	defer func() {
+		if err = ch.Close(); err != nil {
+			zap.L().Error("Failed to close channel", zap.Error(err))
+		}
+	}()
 
 	queue, err := ch.QueueDeclare(
 		ImageQueueName,

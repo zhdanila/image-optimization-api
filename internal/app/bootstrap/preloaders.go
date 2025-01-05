@@ -20,7 +20,10 @@ func mustInitLogger() {
 	if err != nil {
 		panic(err)
 	}
-	defer logger.Sync()
+
+	if err := logger.Sync(); err != nil {
+		zap.L().Error("Failed to sync logger", zap.Error(err))
+	}
 
 	zap.ReplaceGlobals(logger)
 

@@ -6,6 +6,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"io"
+	"mime/multipart"
 	"net/http"
 )
 
@@ -76,7 +77,11 @@ func FromMultipartForm(arg ...any) func(c echo.Context, obj any) error {
 					if err != nil {
 						return err
 					}
-					defer src.Close()
+					defer func(src multipart.File) {
+						if cerr := src.Close(); cerr != nil {
+							err = cerr
+						}
+					}(src)
 
 					fileBytes, err := io.ReadAll(src)
 					if err != nil {
@@ -100,7 +105,11 @@ func FromMultipartForm(arg ...any) func(c echo.Context, obj any) error {
 					if err != nil {
 						return err
 					}
-					defer src.Close()
+					defer func() {
+						if cerr := src.Close(); cerr != nil {
+							err = cerr
+						}
+					}()
 
 					fileBytes, err := io.ReadAll(src)
 					if err != nil {
