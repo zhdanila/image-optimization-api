@@ -9,3 +9,10 @@ geneasyj: install-easyjson
 
 swagger:
 	swag init --parseDependency --parseInternal -g cmd/server/main.go
+
+dbuild:
+	docker build -t image-optimization-api .
+
+dcomposebuild:
+	docker-compose down
+	docker-compose up --build
