@@ -25,6 +25,7 @@ func (s *Image) Register(server *echo.Group) {
 	group.POST("", s.UploadImage)
 	group.GET("/:image_id", s.GetImage)
 	group.GET("/list", s.ListImages)
+	group.GET("/origin", s.ListOriginImages)
 }
 
 // UploadImage @Summary Upload Image
@@ -104,6 +105,31 @@ func (s *Image) ListImages(c echo.Context) error {
 	}
 
 	res, err := s.imageService.ListImages(c.Request().Context(), &obj)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, res)
+}
+
+// ListOriginImages @Summary List Original Images
+// @Description Retrieves a list of original images, excluding those with compression quality suffixes
+// @Tags Images
+// @ID list-origin-images
+// @Produce json
+// @Success 200 {object} image.ListOriginImageResponse
+// @Router /api/image/origin [get]
+func (s *Image) ListOriginImages(c echo.Context) error {
+	var (
+		err error
+		obj image.ListOriginImageRequest
+	)
+
+	if err = bind.BindValidate(c, &obj); err != nil {
+		return err
+	}
+
+	res, err := s.imageService.ListOriginImages(c.Request().Context(), &obj)
 	if err != nil {
 		return err
 	}

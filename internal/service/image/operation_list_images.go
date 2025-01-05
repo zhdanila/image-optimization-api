@@ -30,11 +30,11 @@ func (o *operationListImages) listImages(ctx context.Context) error {
 
 func (o *operationListImages) respond() *ListImageResponse {
 	res := &ListImageResponse{
-		Images: make([]ImageInfo, 0),
+		Images: make([]Info, 0),
 	}
 
 	for _, ent := range o.ents {
-		res.Images = append(res.Images, ImageInfo{
+		res.Images = append(res.Images, Info{
 			Key: ent.Key,
 			URL: ent.URL,
 		})

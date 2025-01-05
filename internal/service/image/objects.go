@@ -32,16 +32,22 @@ type GetImageRequest struct {
 }
 
 type GetImageResponse struct {
-	Image ImageInfo `json:"image"`
+	Image Info `json:"image"`
 }
 
 type ListImageRequest struct{}
 
 type ListImageResponse struct {
-	Images []ImageInfo `json:"images"`
+	Images []Info `json:"images"`
 }
 
-type ImageInfo struct {
+type Info struct {
 	Key string `json:"key"`
 	URL string `json:"url"`
+}
+
+type ListOriginImageRequest struct{}
+
+type ListOriginImageResponse struct {
+	Keys []string `json:"keys"`
 }

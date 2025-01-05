@@ -41,7 +41,7 @@ func (o *operationGetImage) getImage(ctx context.Context) error {
 
 func (o *operationGetImage) respond() *GetImageResponse {
 	res := &GetImageResponse{
-		ImageInfo{
+		Info{
 			Key: o.ent.Key,
 			URL: o.ent.URL,
 		},

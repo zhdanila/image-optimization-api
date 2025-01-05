@@ -14,5 +14,7 @@ dbuild:
 	docker build -t image-optimization-api .
 
 dcomposebuild:
-	docker-compose down
 	docker-compose up --build
+
+run:
+	docker-compose up

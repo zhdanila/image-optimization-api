@@ -91,3 +91,11 @@ func GenerateImageID(fileName string, quality CompressionQuality) string {
 
 	return fmt.Sprintf("%s%s", qualityStr, fileName)
 }
+
+func GetCompressionQualitySuffix() map[CompressionQuality]string {
+	return map[CompressionQuality]string{
+		CompressionQualityHigh:   "high_",
+		CompressionQualityMedium: "medium_",
+		CompressionQualityLow:    "low_",
+	}
+}

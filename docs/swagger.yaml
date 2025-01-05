@@ -2,9 +2,9 @@ definitions:
   image-optimization-api_internal_service_image.GetImageResponse:
     properties:
       image:
-        $ref: '#/definitions/image-optimization-api_internal_service_image.ImageInfo'
+        $ref: '#/definitions/image-optimization-api_internal_service_image.Info'
     type: object
-  image-optimization-api_internal_service_image.ImageInfo:
+  image-optimization-api_internal_service_image.Info:
     properties:
       key:
         type: string
@@ -15,7 +15,14 @@ definitions:
     properties:
       images:
         items:
-          $ref: '#/definitions/image-optimization-api_internal_service_image.ImageInfo'
+          $ref: '#/definitions/image-optimization-api_internal_service_image.Info'
+        type: array
+    type: object
+  image-optimization-api_internal_service_image.ListOriginImageResponse:
+    properties:
+      keys:
+        items:
+          type: string
         type: array
     type: object
   image-optimization-api_pkg_server.EmptyResponse:
@@ -76,6 +83,20 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/image-optimization-api_internal_service_image.ListImageResponse'
+      tags:
+      - Images
+  /api/image/origin:
+    get:
+      description: Retrieves a list of original images, excluding those with compression
+        quality suffixes
+      operationId: list-origin-images
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/image-optimization-api_internal_service_image.ListOriginImageResponse'
       tags:
       - Images
 swagger: "2.0"

@@ -64,6 +64,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/image/origin": {
+            "get": {
+                "description": "Retrieves a list of original images, excluding those with compression quality suffixes",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Images"
+                ],
+                "operationId": "list-origin-images",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/image-optimization-api_internal_service_image.ListOriginImageResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/image/{image_id}": {
             "get": {
                 "description": "Retrieves an image by ID",
@@ -105,11 +125,11 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "image": {
-                    "$ref": "#/definitions/image-optimization-api_internal_service_image.ImageInfo"
+                    "$ref": "#/definitions/image-optimization-api_internal_service_image.Info"
                 }
             }
         },
-        "image-optimization-api_internal_service_image.ImageInfo": {
+        "image-optimization-api_internal_service_image.Info": {
             "type": "object",
             "properties": {
                 "key": {
@@ -126,7 +146,18 @@ const docTemplate = `{
                 "images": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/image-optimization-api_internal_service_image.ImageInfo"
+                        "$ref": "#/definitions/image-optimization-api_internal_service_image.Info"
+                    }
+                }
+            }
+        },
+        "image-optimization-api_internal_service_image.ListOriginImageResponse": {
+            "type": "object",
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
                     }
                 }
             }

@@ -60,3 +60,18 @@ func (s *Service) ListImages(ctx context.Context, obj *ListImageRequest) (*ListI
 
 	return op.respond(), nil
 }
+
+func (s *Service) ListOriginImages(ctx context.Context, obj *ListOriginImageRequest) (*ListOriginImageResponse, error) {
+	var err error
+
+	op := newOperationListOriginImages(s, obj)
+
+	if err = op.listOriginImages(ctx); err != nil {
+		return nil, err
+	}
+	if err = op.findOriginalImage(ctx); err != nil {
+		return nil, err
+	}
+
+	return op.respond(), nil
+}
