@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  app:
+    build: .
+    env_file: .env
+    ports:
+      - "${HTTP_PORT}:${HTTP_PORT}"
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBIT_MQ_HOST=${RABBIT_MQ_HOST}
+
+
+  rabbitmq:
+    image: "rabbitmq:management"
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
